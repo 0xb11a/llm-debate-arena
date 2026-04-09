@@ -76,7 +76,7 @@ export function ApiKeyGate({ onKeySet }: ApiKeyGateProps) {
         rel="noopener noreferrer"
         className="text-ink/20 hover:text-ink/50 transition-colors font-mono text-xs"
       >
-        GitHub
+        [GitHub]
       </a>
     </div>
   );

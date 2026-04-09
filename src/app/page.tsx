@@ -47,7 +47,7 @@ export default function Home() {
     if (apiKey) startDebate(apiKey, modelsMap);
   }, [apiKey, startDebate, modelsMap]);
 
-  const handleExport = useCallback(() => {
+  const handleExport = useCallback(async () => {
     const getModel = (key: string) => modelsMap.get(key) ?? fallbackModelDef(key);
 
     const lines = [
@@ -78,7 +78,17 @@ export default function Home() {
     }
 
     const markdown = lines.join("\n");
-    navigator.clipboard.writeText(markdown);
+    try {
+      await navigator.clipboard.writeText(markdown);
+    } catch {
+      const blob = new Blob([markdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "debate-export.md";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   }, [state, modelsMap]);
 
   const handleLogout = useCallback(() => {
