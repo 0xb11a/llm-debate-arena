@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ApiKeyGate } from "@/components/ApiKeyGate";
 import { DebateSetup } from "@/components/DebateSetup";
 import { DebateView } from "@/components/DebateView";
+import { GitHubLink } from "@/components/GitHubLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useDebate } from "@/hooks/useDebate";
 import { buildModelDef, fallbackModelDef } from "@/lib/models";
@@ -94,6 +95,7 @@ export default function Home() {
     return (
       <div className="relative">
         <div className="absolute top-4 right-4 flex items-center gap-2">
+          <GitHubLink />
           <ThemeToggle />
           <button
             onClick={handleLogout}

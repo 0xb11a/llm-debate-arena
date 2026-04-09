@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { fallbackModelDef } from "@/lib/models";
 import { DebateState, ModelDef } from "@/lib/types";
 import { DebateEntryCard } from "./DebateEntry";
+import { GitHubLink } from "./GitHubLink";
 import { VerdictCard } from "./VerdictCard";
 
 interface DebateViewProps {
@@ -31,8 +32,11 @@ export function DebateView({ state, modelsMap, onCancel, onReset, onExport }: De
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-paper/90 backdrop-blur-sm border-b border-ink/5 p-4">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-ink/80 font-mono text-sm font-bold truncate">
+        <div className="max-w-3xl mx-auto relative">
+          <div className="absolute top-0 right-0">
+            <GitHubLink />
+          </div>
+          <p className="text-ink/80 font-mono text-sm font-bold truncate pr-10">
             &ldquo;{state.config.topic}&rdquo;
           </p>
           <div className="flex items-center gap-3 mt-1 text-xs font-mono text-ink/40 flex-wrap">

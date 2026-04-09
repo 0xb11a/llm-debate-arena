@@ -69,6 +69,15 @@ export function ApiKeyGate({ onKeySet }: ApiKeyGateProps) {
           Key stored in browser only &middot; never sent to our servers
         </p>
       </form>
+
+      <a
+        href="https://github.com/0xb11a/llm-debate-arena"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-ink/20 hover:text-ink/50 transition-colors font-mono text-xs"
+      >
+        GitHub
+      </a>
     </div>
   );
 }
