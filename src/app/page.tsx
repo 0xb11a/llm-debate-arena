@@ -1,19 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ApiKeyGate } from "@/components/ApiKeyGate";
+import { DebateHistory } from "@/components/DebateHistory";
 import { DebateSetup } from "@/components/DebateSetup";
 import { DebateView } from "@/components/DebateView";
 import { GitHubLink } from "@/components/GitHubLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useDebate } from "@/hooks/useDebate";
+import { useDebateHistory } from "@/hooks/useDebateHistory";
 import { buildModelDef, fallbackModelDef } from "@/lib/models";
-import { ModelDef } from "@/lib/types";
+import { DebateHistoryItem, ModelDef } from "@/lib/types";
 
 export default function Home() {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [models, setModels] = useState<ModelDef[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
   const { state, startDebate, cancelDebate, resetDebate, updateConfig } = useDebate();
+  const { history, addItem, removeItem, clearHistory } = useDebateHistory();
+  const savedDebateIdRef = useRef<string | null>(null);
 
   const modelsMap = useMemo(() => {
     const map = new Map<string, ModelDef>();
@@ -35,6 +40,30 @@ export default function Home() {
     }
   }, []);
 
+  // Auto-save completed debates to history
+  useEffect(() => {
+    if (state.phase === "done" && state.verdict && state.entries.length > 0) {
+      const id = `${state.config.topic}-${state.entries[0]?.timestamp ?? Date.now()}`;
+      if (savedDebateIdRef.current === id) return;
+      savedDebateIdRef.current = id;
+
+      const modelNames: DebateHistoryItem["modelNames"] = {};
+      const allKeys = [...state.config.debaters, state.config.judge];
+      for (const key of allKeys) {
+        const m = modelsMap.get(key) ?? fallbackModelDef(key);
+        modelNames[key] = { displayName: m.displayName, avatar: m.avatar, color: m.color };
+      }
+      addItem({
+        id,
+        timestamp: Date.now(),
+        config: state.config,
+        entries: state.entries,
+        verdict: state.verdict,
+        modelNames,
+      });
+    }
+  }, [state.phase, state.verdict, state.entries, state.config, modelsMap, addItem]);
+
   const handleKeySet = useCallback(
     (key: string, rawModels: { id: string; name: string }[]) => {
       setApiKey(key);
@@ -44,7 +73,10 @@ export default function Home() {
   );
 
   const handleStart = useCallback(() => {
-    if (apiKey) startDebate(apiKey, modelsMap);
+    if (apiKey) {
+      savedDebateIdRef.current = null;
+      startDebate(apiKey, modelsMap);
+    }
   }, [apiKey, startDebate, modelsMap]);
 
   const handleExport = useCallback(async () => {
@@ -101,12 +133,31 @@ export default function Home() {
     return <ApiKeyGate onKeySet={handleKeySet} />;
   }
 
+  if (showHistory) {
+    return (
+      <DebateHistory
+        history={history}
+        onClose={() => setShowHistory(false)}
+        onRemove={removeItem}
+        onClear={clearHistory}
+      />
+    );
+  }
+
   if (state.phase === "setup") {
     return (
       <div className="relative">
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <GitHubLink />
           <ThemeToggle />
+          {history.length > 0 && (
+            <button
+              onClick={() => setShowHistory(true)}
+              className="text-xs font-mono text-ink/30 hover:text-ink/60 transition-colors cursor-pointer"
+            >
+              History ({history.length})
+            </button>
+          )}
           <button
             onClick={handleLogout}
             className="text-xs font-mono text-ink/30 hover:text-ink/60 transition-colors cursor-pointer"

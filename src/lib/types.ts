@@ -38,6 +38,16 @@ export interface DebateState {
   error: string | null;
 }
 
+export interface DebateHistoryItem {
+  id: string;
+  timestamp: number;
+  config: DebateConfig;
+  entries: DebateEntry[];
+  verdict: string;
+  /** Snapshot of display names so history works without re-fetching models */
+  modelNames: Record<string, { displayName: string; avatar: string; color: string }>;
+}
+
 export type DebateAction =
   | { type: "SET_CONFIG"; config: DebateConfig }
   | { type: "START_DEBATE" }
