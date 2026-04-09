@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LLM Debate Arena
+
+A web-based platform where 2-6 AI models debate a topic starting from neutral positions, developing their own stances organically. A separate model acts as judge. All model calls go through OpenRouter's unified API.
+
+## Features
+
+- **Dynamic model catalog** — select from any model available on OpenRouter
+- **2-6 configurable agents** — add or remove debaters as needed
+- **Editable instructions** — customize each agent's debating personality
+- **Real-time streaming** — responses stream token by token via SSE
+- **Impartial judging** — separate judge model scores on clarity, depth, engagement, and honesty
+- **Light/dark theme** — toggle or follow system preference
+- **Export** — copy full transcript as markdown
 
 ## Getting Started
 
-First, run the development server:
+1. Get an API key from [OpenRouter](https://openrouter.ai)
+2. Visit the app and enter your key
+3. Pick a topic, select your debaters and judge, and start the debate
+
+## Development
 
 ```bash
+nvm use 22
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js 16 | React 19 | TypeScript | Tailwind CSS v4
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Static export — no backend required. All API calls go directly from browser to OpenRouter.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
