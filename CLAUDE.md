@@ -38,7 +38,7 @@ Models are fetched dynamically from OpenRouter's `/api/v1/models` endpoint. The 
 
 ## Deployment
 
-Static export deployed to GitHub Pages via `.github/workflows/deploy.yml`. The `basePath` is set to `/llm-debate-arena` in `next.config.ts`.
+Static export deployed to GitHub Pages via `.github/workflows/deploy.yml`. Custom domain: `llmda.b11a.xyz` (CNAME in `public/`).
 
 ## Spec
 
